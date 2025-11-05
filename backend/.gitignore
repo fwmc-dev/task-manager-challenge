@@ -1,15 +1,16 @@
 # Node.js
 node_modules/
 dist/
+build/
 
 # TypeScript
 *.tsbuildinfo
-
-# Next.js
-.next/
 
 # Logs
 *.log
 
 # env files
 .env*
+
+# Other
+.vscode/
