@@ -5,3 +5,8 @@ export interface Task {
     completed: boolean;
     createdAt: Date;
 }
+
+export interface TaskFilters {
+    completed?: boolean;
+    search?: string;
+}

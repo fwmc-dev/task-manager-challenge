@@ -1,10 +1,25 @@
 import { Task } from '../models/task.model';
+import { TaskFilters } from '../models/task.model';
 
 export class TaskService {
     private tasks: Task[] = [];
 
-    getAll(): Task[] {
-        return this.tasks;
+    getAll(filters: TaskFilters = {}): Task[] {
+        let result = this.tasks;
+
+        if (filters.completed !== undefined) {
+            result = result.filter(task => task.completed === filters.completed);
+        }
+
+        if (filters.search) {
+            const lowerCaseSearch = filters.search.toLowerCase();
+            result = result.filter(task => 
+                task.title.toLowerCase().includes(lowerCaseSearch) || 
+                task.description.toLowerCase().includes(lowerCaseSearch)
+            );
+        }
+
+        return result;
     }
 
     create(title: string, description: string): Task {

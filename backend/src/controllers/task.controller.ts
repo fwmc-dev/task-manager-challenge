@@ -1,11 +1,27 @@
 import { Request, Response } from 'express';
 import { TaskService } from '../services/task.services';
+import { TaskFilters } from '../models/task.model';
 
 export class TaskController {
     private service = new TaskService();
 
     getTasks = (req: Request, res: Response) => {
-        res.json(this.service.getAll());
+        const { completed, search } = req.query;
+
+
+        const filters: TaskFilters = {};
+
+        if (completed !== undefined) {
+            filters.completed = completed === 'true';
+        }
+        
+        if (typeof search === 'string') {
+            filters.search = search;
+        }
+
+        const filteredTasks = this.service.getAll(filters);
+        
+        res.json(filteredTasks);
     };
 
     createTask = (req: Request, res: Response) => {
