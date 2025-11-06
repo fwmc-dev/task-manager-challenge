@@ -27,7 +27,7 @@ export default function TaskForm({ onClose, onSubmit, currentTask }: TaskFormPro
       </div>
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-gray-300">Descripción*</label>
-        <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="mt-1 block w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required />
+        <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} className="mt-1 block w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
       </div>
       <div className="flex justify-end space-x-3">
         <button type="button" onClick={onClose} className="hover:cursor-pointer px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500 transition duration-150">

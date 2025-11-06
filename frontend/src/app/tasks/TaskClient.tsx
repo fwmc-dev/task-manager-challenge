@@ -5,10 +5,12 @@ import TaskList from "@/components/TaskList";
 import Modal from '@/components/Modal';
 import TaskForm from '@/components/TaskForm';
 import Alert from "@/components/Alert";
+import SearchBar from '@/components/SearchBar';
 import { TaskData } from "@/types/task.types";
 import updateTask from "@/actions/updateTask";
 import deleteTask from "@/actions/deleteTask";
 import createTask from '@/actions/createTask';
+import getTasks from '@/actions/getTask';
 
 interface TaskClientProps {
     initialTasks: TaskData[];
@@ -22,8 +24,9 @@ interface ClientAlert {
 }
 
 export default function TaskClient({ initialTasks, errorMessage }: TaskClientProps) {
-    const [tasks, setTasks] = useState<TaskData[]>(() => initialTasks);
     const [clientAlert, setClientAlert] = useState<ClientAlert | null>(errorMessage ? { id: 1, message: errorMessage, type: 'error' } : null);
+    
+    const [tasks, setTasks] = useState<TaskData[]>(() => initialTasks);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingTask, setEditingTask] = useState<TaskData | null>(null);
 
@@ -35,7 +38,16 @@ export default function TaskClient({ initialTasks, errorMessage }: TaskClientPro
         setClientAlert(null);
     }, []);
 
-    
+    const handleSearch = async (query: string) => {
+        try {
+            const searchedTasks = await getTasks(query); 
+            
+            setTasks(searchedTasks.tasks);
+        } catch (error) {
+            console.error("Error al buscar tareas: ", error);
+            showAlert('No se pudieron cargar las tareas con la búsqueda.', 'error');
+        }
+    };
 
     const openCreateModal = () => {
         setEditingTask(null);
@@ -115,11 +127,12 @@ export default function TaskClient({ initialTasks, errorMessage }: TaskClientPro
                 />
             )}
             <section className="px-6 lg:px-8 w-full max-w-7xl">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-4xl font-bold text-white">Mis Tareas</h1>
+                <div className="flex gap-3 mb-6 flex-col md:flex-row md:justify-between md:items-center">
+                    <h1 className="text-4xl font-bold text-white text-center md:text-start">Mis Tareas</h1>
+                    <SearchBar onSearch={handleSearch} />
                     <button
                         onClick={openCreateModal}
-                        className="hover:cursor-pointer rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+                        className="w-fit self-center hover:cursor-pointer rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                     >
                         + Nueva Tarea
                     </button>
